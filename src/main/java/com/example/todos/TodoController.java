@@ -19,10 +19,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("api/todos")
-public class ItemController {
+public class TodoController {
     private final TodoService service;
 
-    public ItemController(TodoService service) {
+    public TodoController(TodoService service) {
         this.service = service;
     }
 

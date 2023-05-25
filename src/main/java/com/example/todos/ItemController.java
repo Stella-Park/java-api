@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("api/menu/items")
+@RequestMapping("api/todos")
 public class ItemController {
     private final TodoService service;
 

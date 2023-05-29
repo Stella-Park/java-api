@@ -1,6 +1,6 @@
 // com/example/menu/item/ItemService.java
 
-package com.example.menu.item;
+package com.example.todos;
 
 import org.springframework.data.map.repository.config.EnableMapRepositories;
 import org.springframework.data.repository.CrudRepository;
@@ -13,51 +13,49 @@ import java.util.Optional;
 
 @Service
 @EnableMapRepositories
-public class ItemService {
-    private final CrudRepository<Item, Long> repository;
+public class TodoService {
+    private final CrudRepository<Todo, Long> repository;
 
-    public ItemService(CrudRepository<Item, Long> repository) {
+    public TodoService(CrudRepository<Todo, Long> repository) {
         this.repository = repository;
         this.repository.saveAll(defaultItems());
     }
 
-    private static List<Item> defaultItems() {
+    private static List<Todo> defaultItems() {
         return List.of(
-            new Item(1L, "Burger", 599L, "Tasty", "https://cdn.auth0.com/blog/whatabyte/burger-sm.png"),
-            new Item(2L, "Pizza", 299L, "Cheesy", "https://cdn.auth0.com/blog/whatabyte/pizza-sm.png"),
-            new Item(3L, "Tea", 199L, "Informative", "https://cdn.auth0.com/blog/whatabyte/tea-sm.png")
+            new Todo(1L, "밥먹기", false),
+            new Todo(2L, "일하기", false),
+            new Todo(3L, "잠자기", true)
         );
     }
 
-    public List<Item> findAll() {
-        List<Item> list = new ArrayList<>();
-        Iterable<Item> items = repository.findAll();
+    public List<Todo> findAll() {
+        List<Todo> list = new ArrayList<>();
+        Iterable<Todo> items = repository.findAll();
         items.forEach(list::add);
         return list;
     }
 
-    public Optional<Item> find(Long id) {
+    public Optional<Todo> find(Long id) {
         return repository.findById(id);
     }
 
-    public Item create(Item item) {
+    public Todo create(Todo item) {
         // To ensure the item ID remains unique,
         // use the current timestamp.
-        Item copy = new Item(
+        Todo copy = new Todo(
             new Date().getTime(),
-            item.getName(),
-            item.getPrice(),
-            item.getDescription(),
-            item.getImage()
+            item.getTitle(),
+            item.getIsCompleted()
         );
         return repository.save(copy);
     }
 
-    public Optional<Item> update( Long id, Item newItem) {
+    public Optional<Todo> update( Long id, Todo newItem) {
         // Only update an item if it can be found first.
         return repository.findById(id)
             .map(oldItem -> {
-                Item updated = oldItem.updateWith(newItem);
+                Todo updated = oldItem.updateWith(newItem);
                 return repository.save(updated);
             });
     }

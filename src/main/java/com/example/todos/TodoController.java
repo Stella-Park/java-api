@@ -1,6 +1,6 @@
 // com/example/menu/item/ItemController.java
 
-package com.example.menu.item;
+package com.example.todos;
 
 import java.net.URI;
 import java.util.List;
@@ -18,29 +18,29 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("api/menu/items")
-public class ItemController {
-    private final ItemService service;
+@RequestMapping("/api/todos")
+public class TodoController {
+    private final TodoService service;
 
-    public ItemController(ItemService service) {
+    public TodoController(TodoService service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<List<Item>> findAll() {
-        List<Item> items = service.findAll();
+    public ResponseEntity<List<Todo>> findAll() {
+        List<Todo> items = service.findAll();
         return ResponseEntity.ok().body(items);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Item> find(@PathVariable("id") Long id) {
-        Optional<Item> item = service.find(id);
+    public ResponseEntity<Todo> find(@PathVariable("id") Long id) {
+        Optional<Todo> item = service.find(id);
         return ResponseEntity.of(item);
     }
 
     @PostMapping
-    public ResponseEntity<Item> create(@RequestBody Item item) {
-        Item created = service.create(item);
+    public ResponseEntity<Todo> create(@RequestBody Todo item) {
+        Todo created = service.create(item);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(created.getId())
@@ -49,16 +49,16 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Item> update(
+    public ResponseEntity<Todo> update(
         @PathVariable("id") Long id,
-        @RequestBody Item updatedItem) {
+        @RequestBody Todo updatedItem) {
 
-        Optional<Item> updated = service.update(id, updatedItem);
+        Optional<Todo> updated = service.update(id, updatedItem);
 
         return updated
             .map(value -> ResponseEntity.ok().body(value))
             .orElseGet(() -> {
-                Item created = service.create(updatedItem);
+                Todo created = service.create(updatedItem);
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(created.getId())
@@ -68,7 +68,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Item> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Todo> delete(@PathVariable("id") Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
